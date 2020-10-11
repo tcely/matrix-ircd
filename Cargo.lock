@@ -48,6 +48,12 @@ dependencies = [
 ]
 
 [[package]]
+name = "assign"
+version = "1.1.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "4af5687fe33aec5e70ef14caac5e0d363e335e5e5d6385fb75978d0c241b1d67"
+
+[[package]]
 name = "atty"
 version = "0.2.14"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -254,6 +260,16 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "00b0228411908ca8685dba7fc2cdd70ec9990a6e753e89b6ac91a84c40fbaf4b"
 
 [[package]]
+name = "form_urlencoded"
+version = "1.0.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "ece68d15c92e84fa4f19d3780f1294e5ca82a78a6d515f1efaabcc144688be00"
+dependencies = [
+ "matches",
+ "percent-encoding 2.1.0",
+]
+
+[[package]]
 name = "fuchsia-zircon"
 version = "0.3.3"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -401,6 +417,15 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "d7afe4a420e3fe79967a00898cc1f4db7c8a49a9333a29f8a4bd76a253d5cd04"
 
 [[package]]
+name = "heck"
+version = "0.3.1"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "20564e78d53d2bb135c343b3f47714a56af2061f1c928fdb541dc7b9fdd94205"
+dependencies = [
+ "unicode-segmentation",
+]
+
+[[package]]
 name = "hermit-abi"
 version = "0.1.17"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -527,6 +552,15 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "dc6f3ad7b9d11a0c00842ff8de1b60ee58661048eb8049ed33c73594f359d7e6"
 
 [[package]]
+name = "js_int"
+version = "0.1.9"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "b96797f53235a1d6dc985f244a69de54b04c45b7e0e357a35c85a45a847d92f2"
+dependencies = [
+ "serde",
+]
+
+[[package]]
 name = "kernel32-sys"
 version = "0.2.2"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -567,10 +601,12 @@ checksum = "7ffc5c5338469d4d3ea17d269fa8ea3512ad247247c30bd2df69e68309ed0a08"
 name = "matrix-ircd"
 version = "0.1.0"
 dependencies = [
+ "assign",
  "clap",
  "futures",
  "hyper",
  "hyper-tls",
+ "js_int",
  "lazy_static",
  "mockito",
  "native-tls",
@@ -580,6 +616,7 @@ dependencies = [
  "quick-error",
  "rand",
  "regex",
+ "ruma-client-api",
  "serde",
  "serde_json",
  "slog",
@@ -995,6 +1032,138 @@ dependencies = [
 ]
 
 [[package]]
+name = "ruma-api"
+version = "0.17.0-alpha.1"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "8578695d34e0e77a5bed2619da3681544430151253986b614724b133fe2cc6a9"
+dependencies = [
+ "http",
+ "percent-encoding 2.1.0",
+ "ruma-api-macros",
+ "ruma-identifiers",
+ "ruma-serde",
+ "serde",
+ "serde_json",
+ "strum",
+]
+
+[[package]]
+name = "ruma-api-macros"
+version = "0.17.0-alpha.1"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "d73a8bb48b8cf9f5ecd6223855ccfcfe38718c8520a3a21161275261ce654e61"
+dependencies = [
+ "proc-macro2",
+ "quote",
+ "syn",
+]
+
+[[package]]
+name = "ruma-client-api"
+version = "0.10.0-alpha.1"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "1cf68896a233c62f5a2e908e1e0dc2201065acfbac1aa44385e8bd12f2af2aa0"
+dependencies = [
+ "http",
+ "js_int",
+ "ruma-api",
+ "ruma-common",
+ "ruma-events",
+ "ruma-identifiers",
+ "ruma-serde",
+ "serde",
+ "serde_json",
+ "strum",
+]
+
+[[package]]
+name = "ruma-common"
+version = "0.2.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "75a6ec52d8db86b4959df8a09e2a83483f661f3324ed256f605aa58a8b32ec42"
+dependencies = [
+ "js_int",
+ "ruma-serde",
+ "serde",
+ "serde_json",
+ "strum",
+]
+
+[[package]]
+name = "ruma-events"
+version = "0.22.0-alpha.1"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "c4e72529a479a65af8b4fa69a728a37a7cbfa331be3909b0a2b060f8ab28b9f9"
+dependencies = [
+ "js_int",
+ "ruma-common",
+ "ruma-events-macros",
+ "ruma-identifiers",
+ "ruma-serde",
+ "serde",
+ "serde_json",
+ "strum",
+]
+
+[[package]]
+name = "ruma-events-macros"
+version = "0.22.0-alpha.1"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "acc82676443196652925c86e9b8f102ad0a5b4e7f6b84de136acfaede5915696"
+dependencies = [
+ "proc-macro2",
+ "quote",
+ "syn",
+]
+
+[[package]]
+name = "ruma-identifiers"
+version = "0.17.4"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "5917092ecf88dec0a9a1f39ed5755096f39dc23003dcc278a58805ee8be65dee"
+dependencies = [
+ "ruma-identifiers-macros",
+ "ruma-identifiers-validation",
+ "serde",
+ "strum",
+]
+
+[[package]]
+name = "ruma-identifiers-macros"
+version = "0.17.4"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "986f7ea65aac70e22fdbdadf582d51ceb4c896c0844ccf7a944a1128c2c5e30e"
+dependencies = [
+ "proc-macro2",
+ "quote",
+ "ruma-identifiers-validation",
+ "syn",
+]
+
+[[package]]
+name = "ruma-identifiers-validation"
+version = "0.1.1"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "c112fd1d537d0c9eec9ec93e098576f8c68b2eabbc64b7275b1ed28235fe605b"
+dependencies = [
+ "serde",
+ "strum",
+]
+
+[[package]]
+name = "ruma-serde"
+version = "0.2.3"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "6a50045b7e93329085488c88aee95e109c32d53c89d0f4882791e2cc81eb10ce"
+dependencies = [
+ "form_urlencoded",
+ "itoa",
+ "js_int",
+ "serde",
+ "serde_json",
+]
+
+[[package]]
 name = "rust-argon2"
 version = "0.8.2"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -1152,6 +1321,27 @@ name = "strsim"
 version = "0.8.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "8ea5119cdb4c55b55d432abb513a0429384878c15dde60cc77b1c99de1a95a6a"
+
+[[package]]
+name = "strum"
+version = "0.18.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "57bd81eb48f4c437cadc685403cad539345bf703d78e63707418431cecd4522b"
+dependencies = [
+ "strum_macros",
+]
+
+[[package]]
+name = "strum_macros"
+version = "0.18.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "87c85aa3f8ea653bfd3ddf25f7ee357ee4d204731f6aa9ad04002306f6e2774c"
+dependencies = [
+ "heck",
+ "proc-macro2",
+ "quote",
+ "syn",
+]
 
 [[package]]
 name = "syn"
@@ -1348,6 +1538,12 @@ checksum = "6fb19cf769fa8c6a80a162df694621ebeb4dafb606470b2b2fce0be40a98a977"
 dependencies = [
  "tinyvec",
 ]
+
+[[package]]
+name = "unicode-segmentation"
+version = "1.6.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "e83e153d1053cbb5a118eeff7fd5be06ed99153f00dbcd8ae310c5fb2b22edc0"
 
 [[package]]
 name = "unicode-width"

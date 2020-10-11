@@ -20,6 +20,9 @@ use std::task::Context;
 
 use super::protocol::SyncResponse;
 
+use assign::assign;
+use js_int::uint;
+
 use url::Url;
 
 use futures::prelude::{Future, TryFuture};
@@ -124,12 +127,25 @@ impl MatrixSyncClient {
             };
         }
     }
+
     fn make_request(&self) -> RequestStatus {
+        use ruma_client_api::r0::filter::{Filter, FilterDefinition, RoomEventFilter, RoomFilter};
+
+        let filter = assign!(FilterDefinition::default(), {
+            account_data: Some(Filter::ignore_all()),
+            presence: Some(Filter::ignore_all()),
+            room: Some(assign!(RoomFilter::default(), {
+                account_data: Some(RoomEventFilter::ignore_all()),
+                ephemeral: Some(RoomEventFilter::ignore_all()),
+                timeline: Some(assign!(RoomEventFilter::default(), { limit: Some(uint!(10)) })),
+            }))
+        });
+
         let mut url = self.url.clone();
         url.query_pairs_mut()
             .clear()
             .append_pair("access_token", &self.access_token)
-            .append_pair("filter", r#"{"presence":{"not_types":["m.presence"]}}"#)
+            .append_pair("filter", &serde_json::to_string(&filter).unwrap())
             .append_pair("timeout", "30000");
 
         if let Some(ref token) = self.next_token {

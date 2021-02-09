@@ -17,7 +17,6 @@
 use crate::ConnectionContext;
 
 use futures::stream::StreamExt;
-use futures::task::Poll;
 
 use crate::irc::{IrcCommand, IrcUserConnection};
 
@@ -304,11 +303,7 @@ impl<IS: AsyncRead + AsyncWrite + 'static + Send> Bridge<IS> {
         }
 
         loop {
-            let poll_response = match self.irc_conn.as_mut().poll().await? {
-                Poll::Ready(x) => x,
-                Poll::Pending => return Ok(()),
-            };
-
+            let poll_response = self.irc_conn.as_mut().poll().await?;
             if let Some(line) = poll_response {
                 self.handle_irc_cmd(line).await;
             } else {

@@ -27,7 +27,6 @@ use crate::ConnectionContext;
 use tokio::io::{AsyncRead, AsyncWrite};
 
 use futures::stream::StreamExt;
-use futures::task::Poll;
 
 use std::boxed::Box;
 use std::io;
@@ -359,7 +358,7 @@ where
             .await;
     }
 
-    pub async fn poll(&mut self) -> Poll<Result<Option<IrcCommand>, io::Error>> {
+    pub async fn poll(&mut self) -> Result<Option<IrcCommand>, io::Error> {
         loop {
             let next = self.conn.as_mut().next().await;
 
@@ -372,7 +371,7 @@ where
                     }
                     IrcCommand::Join { channel } => {
                         if !self.attempt_to_write_join_response(&channel).await {
-                            return Poll::Ready(Ok(Some(IrcCommand::Join { channel })));
+                            return Ok(Some(IrcCommand::Join { channel }));
                         }
                     }
                     IrcCommand::Who { matches } => {
@@ -390,10 +389,10 @@ where
                         }
                     }
                     IrcCommand::Pong { .. } => {}
-                    c => return Poll::Ready(Ok(Some(c))),
+                    c => return Ok(Some(c)),
                 },
-                Some(Err(e)) => return Poll::Ready(Err(e)),
-                None => return Poll::Ready(Ok(None)),
+                Some(Err(e)) => return Err(e),
+                None => return Ok(None),
             }
         }
     }

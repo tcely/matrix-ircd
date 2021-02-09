@@ -394,13 +394,7 @@ impl MappingStore {
             if let Some(alias) = room.get_state_content_key("m.room.canonical_alias", "", "alias") {
                 alias.into()
             } else if let Some(name) = room.get_name() {
-                let stripped_name: String = name
-                    .chars()
-                    .filter(|c| match *c {
-                        '\x00'..='\x20' | '@' | '"' | '+' | '#' | '\x7F' => false,
-                        _ => true,
-                    })
-                    .collect();
+                let stripped_name = sanitize_for_irc(name);
 
                 if !stripped_name.is_empty() {
                     format!("#{}", stripped_name)
@@ -468,22 +462,9 @@ impl MappingStore {
             return nick.clone();
         }
 
-        let mut nick: String = display_name
-            .chars()
-            .filter(|c| match *c {
-                '\x00'..='\x20' | '@' | '"' | '+' | '#' | '\x7F' => false,
-                _ => true,
-            })
-            .collect();
-
+        let mut nick = sanitize_for_irc(display_name);
         if nick.len() < 3 {
-            nick = user_id
-                .chars()
-                .filter(|c| match *c {
-                    '\x00'..='\x20' | '@' | '"' | '+' | '#' | '\x7F' => false,
-                    _ => true,
-                })
-                .collect();
+            nick = sanitize_for_irc(user_id);
         }
 
         if irc_server.nick_exists(&nick) {
@@ -509,4 +490,10 @@ impl MappingStore {
     pub fn get_nick_from_matrix(&self, user_id: &str) -> Option<&String> {
         self.matrix_uid_to_nick.get(user_id)
     }
+}
+
+fn sanitize_for_irc(id: &str) -> String {
+    id.chars()
+        .filter(|c| !matches!(*c, '\x00'..='\x20' | '@' | '"' | '+' | '#' | '\x7F'))
+        .collect()
 }

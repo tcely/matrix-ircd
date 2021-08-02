@@ -1,5 +1,5 @@
 FROM rust:1-slim AS builder
-RUN apt-get update && apt-get -y install ca-certificates libssl-dev
+RUN apt-get update && apt-get -y install ca-certificates libssl-dev pkg-config
 WORKDIR /usr/src/matrix-ircd
 COPY . .
 RUN cargo install --path .

@@ -1,3 +1,6 @@
+.dockerignore
+.travis.yml
+snap
 target
-Dockerfile
 Makefile
+*.snap
